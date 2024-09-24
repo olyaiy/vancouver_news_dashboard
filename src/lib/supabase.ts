@@ -1,3 +1,4 @@
+
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl: string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -26,4 +27,20 @@ export interface Article {
     og_image_url: string | null;
     is_featured: boolean;
     sources: string[] | null;
+}
+
+
+// Fetch all articles (PLURAL)
+export async function fetchArticles() {
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*');
+  
+    if (error) {
+      console.error('Error fetching articles:', error);
+      return [];
+    }
+  
+    console.log('Fetched articles:', data); // Log the fetched data
+    return data as Article[];
 }

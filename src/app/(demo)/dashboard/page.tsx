@@ -10,8 +10,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import { fetchArticles } from "@/lib/supabase";
+import { PaginatedArticleList } from "@/components/paginated-article-list";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const articles = await fetchArticles();
+
   return (
     <ContentLayout title="Dashboard">
       <Breadcrumb>
@@ -27,7 +31,7 @@ export default function DashboardPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <PlaceholderContent />
+      <PaginatedArticleList articles={articles} articlesPerPage={9} />
     </ContentLayout>
   );
 }
