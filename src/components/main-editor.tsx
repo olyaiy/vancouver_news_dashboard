@@ -1,9 +1,9 @@
 import React from 'react'
-import { Article } from '@/lib/supabase'
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image'
+import { Article } from '@/types/types'
 
 interface MainEditorProps {
   article: Article;

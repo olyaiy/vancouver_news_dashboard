@@ -1,9 +1,10 @@
 import React from 'react'
-import { Article } from '@/lib/supabase'
+
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { SourcesEditor } from '@/components/source-editor'
+import { Article } from '@/types/types'
 
 interface SidebarEditorProps {
   article: Article;

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { Plus, Trash2 } from 'lucide-react'
-import { Article } from '@/lib/supabase'
+import { Article } from '@/types/types'
 
 interface SourcesEditorProps {
   article: Article;

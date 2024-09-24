@@ -1,8 +1,8 @@
 'use client'
 import { useState } from 'react';
-import { Article } from '@/lib/supabase';
 import { ArticleCard } from './article-card';
 import { Button } from "@/components/ui/button";
+import { Article } from '@/types/types';
 
 interface PaginatedArticleListProps {
   articles: Article[];

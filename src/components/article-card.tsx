@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Article } from '@/lib/supabase';
+import { Article } from '@/types/types';
 
 interface ArticleCardProps {
   article: Article;

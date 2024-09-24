@@ -1,17 +1,7 @@
+'use server'
 
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "./supabase-client";
 
-const supabaseUrl: string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-// const supabaseKey: string = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-// Service Role Key
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
-
-
-// Article interface
 export interface Article {
     id: string; // UUID is a string
     created_at: string;
@@ -34,8 +24,11 @@ export interface Article {
 }
 
 
+
 // Fetch all articles (PLURAL)
 export async function fetchArticles() {
+    // 'use server'
+
     const { data, error } = await supabase
       .from('articles')
       .select('*');
@@ -52,6 +45,8 @@ export async function fetchArticles() {
 
 // Fetch article by id
 export async function fetchArticle(id: string) {
+    // 'use server'
+
     const { data, error } = await supabase
       .from('articles')
       .select('*')
@@ -69,6 +64,8 @@ export async function fetchArticle(id: string) {
 
 // Create a new article with placeholder values
 export async function createArticle(): Promise<Article> {
+    'use server'
+
   const placeholderArticle: Omit<Article, 'id' | 'created_at'> = {
     Title: 'Placeholder Title',
     slug: 'placeholder-title',
@@ -103,19 +100,37 @@ export async function createArticle(): Promise<Article> {
 }
 
 // Update an existing article
-export async function updateArticle(id: string, updatedFields: Partial<Article>): Promise<Article> {
-  const { data, error } = await supabase
-    .from('articles')
-    .update(updatedFields)
-    .eq('id', id)
-    .select()
-    .single();
+export async function updateArticle(id: string, updatedFields: Partial<Article>): Promise<{ success: boolean; message: string; article?: Article }> {
+//   'use server'
 
-  if (error) {
+  try {
+    const { data, error } = await supabase
+      .from('articles')
+      .update(updatedFields)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      success: true,
+      message: 'Article updated successfully',
+      article: data as Article
+    };
+  } catch (error) {
     console.error('Error updating article:', error);
-    throw new Error('Failed to update article');
+    return {
+      success: false,
+      message: 'Failed to update article'
+    };
   }
-
-  return data as Article;
 }
 
+
+export async function test() {
+    'use server'
+    console.log('test')
+}

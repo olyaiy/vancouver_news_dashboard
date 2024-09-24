@@ -9,14 +9,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import { Article, fetchArticle } from "@/lib/supabase";
+import { Article, fetchArticle, updateArticle } from "@/lib/supabase";
 import ArticleEditor from "../article-editor";
+import { Button } from "@/components/ui/button";
 
-interface EditorPageProps {
-  params: {
-    id: string;
-  };
-}
+
 
 export default async function EditorPage({ params }: { params: { id: string } }) {
 
@@ -48,7 +45,7 @@ export default async function EditorPage({ params }: { params: { id: string } })
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <ArticleEditor articleData={article} />
+      <ArticleEditor articleData={article} articleId={article.id} />
     </ContentLayout>
   );
 }
