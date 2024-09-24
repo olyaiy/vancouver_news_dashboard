@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { supabase } from "./supabase-client";
+import { redirect } from "next/navigation";
 
 export interface Article {
     id: string; // UUID is a string
@@ -160,6 +161,8 @@ export async function deleteArticle(id: string): Promise<{ success: boolean; mes
       success: false,
       message: 'Failed to delete article'
     };
+  } finally {
+    redirect('/dashboard');
   }
 }
 

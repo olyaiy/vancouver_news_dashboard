@@ -6,19 +6,24 @@ import SidebarEditor from '@/components/sidebar-editor'
 import { Article } from '@/types/types'
 import { useToast } from '@/hooks/use-toast'
 import { updateArticle } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 const ArticleEditor = ({ articleData, articleId }: { articleData: Article, articleId: string }) => {
   const [article, setArticle] = useState<Article>(articleData);
   const { toast } = useToast()
+  const router = useRouter();
+
 
   const handleUpdateArticle = async () => {
     const result = await updateArticle(articleId, article);
     if (result.success) {
+
       toast({
         title: "Success",
         description: result.message,
         variant: "default",
       });
+
     } else {
       toast({
         title: "Error",
