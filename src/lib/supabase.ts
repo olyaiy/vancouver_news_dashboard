@@ -44,3 +44,20 @@ export async function fetchArticles() {
     console.log('Fetched articles:', data); // Log the fetched data
     return data as Article[];
 }
+
+
+// Fetch article by id
+export async function fetchArticle(id: string) {
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('id', id)
+      .single();
+  
+    if (error || !data) {
+      console.error('Error fetching article:', error);
+      throw new Error('Failed to fetch article');
+    }
+  
+    return data as Article;
+}  
