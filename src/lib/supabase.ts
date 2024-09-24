@@ -98,6 +98,7 @@ export async function createArticle(): Promise<Article> {
     throw new Error('Failed to create article');
   }
 
+  revalidatePath('/', 'layout');
   return data as Article;
 }
 

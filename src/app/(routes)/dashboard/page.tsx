@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
@@ -9,8 +10,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import { fetchArticles } from "@/lib/supabase";
+import { fetchArticles, createArticle } from "@/lib/supabase";
 import { PaginatedArticleList } from "@/components/paginated-article-list";
+import { Button } from "@/components/ui/button";
+
+async function createAndRedirect() {
+  "use server"
+  const newArticle = await createArticle();
+  redirect(`/editor/${newArticle.id}`);
+}
 
 export default async function DashboardPage() {
   const articles = await fetchArticles();
@@ -30,6 +38,12 @@ export default async function DashboardPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Articles</h2>
+        <form action={createAndRedirect}>
+          <Button type="submit">Create New Article</Button>
+        </form>
+      </div>
       <PaginatedArticleList articles={articles} articlesPerPage={9} />
     </ContentLayout>
   );
