@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from "next/cache";
 import { supabase } from "./supabase-client";
 
 export interface Article {
@@ -115,6 +116,9 @@ export async function updateArticle(id: string, updatedFields: Partial<Article>)
       throw error;
     }
 
+    revalidatePath('/', 'layout');
+
+
     return {
       success: true,
       message: 'Article updated successfully',
@@ -130,7 +134,32 @@ export async function updateArticle(id: string, updatedFields: Partial<Article>)
 }
 
 
-export async function test() {
-    'use server'
-    console.log('test')
+// Delete an article by id
+export async function deleteArticle(id: string): Promise<{ success: boolean; message: string }> {
+  'use server'
+
+  try {
+    const { error } = await supabase
+      .from('articles')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+
+    revalidatePath('/', 'layout');
+
+    return {
+      success: true,
+      message: 'Article deleted successfully'
+    };
+  } catch (error) {
+    console.error('Error deleting article:', error);
+    return {
+      success: false,
+      message: 'Failed to delete article'
+    };
+  }
 }
+
