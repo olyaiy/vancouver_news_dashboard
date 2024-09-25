@@ -40,7 +40,6 @@ export async function fetchArticles() {
       return [];
     }
   
-    console.log('Fetched articles:', data); // Log the fetched data
     return data as Article[];
 }
 
@@ -165,5 +164,42 @@ export async function deleteArticle(id: string): Promise<{ success: boolean; mes
   } finally {
     redirect('/dashboard');
   }
+}
+
+
+
+export async function uploadImage(base64Image: string, fileType: string): Promise<string | null> {
+    'use server'
+
+    try {
+        const fileName = `${Date.now()}.${fileType.split('/')[1]}`
+        const filePath = `article-thumbnails/${fileName}`
+
+        // Convert base64 to Buffer
+        const buffer = Buffer.from(base64Image.split(',')[1], 'base64')
+
+        const { error: uploadError } = await supabase.storage
+            .from('article-thumbnails')
+            .upload(filePath, buffer, {
+                contentType: fileType
+            })
+
+        if (uploadError) {
+            throw uploadError
+        }
+
+        const { data: { publicUrl }, error: urlError } = supabase.storage
+            .from('article-thumbnails')
+            .getPublicUrl(filePath)
+
+        if (urlError) {
+            throw urlError
+        }
+
+        return publicUrl
+    } catch (error) {
+        console.error('Error uploading image:', error)
+        return null
+    }
 }
 

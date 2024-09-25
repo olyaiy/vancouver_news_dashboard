@@ -8,6 +8,12 @@ const nextConfig = {
           port: '',
           pathname: '/webp/gallery/**',
         },
+        {
+          protocol: 'https',
+          hostname: 'ckuznzdvberxbsjnqvst.supabase.co',
+          port: '',
+          pathname: '/storage/v1/object/public/**',
+        },
       ],
     },
   };

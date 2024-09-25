@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { SourcesEditor } from '@/components/source-editor'
 import { Article } from '@/types/types'
-import { deleteArticle } from '@/lib/supabase'
+import { deleteArticle, uploadImage } from '@/lib/supabase'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,6 +29,21 @@ const SidebarEditor: React.FC<SidebarEditorProps> = ({ article, setArticle }) =>
 
   const handleChange = (field: keyof Article, value: any) => {
     setArticle(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Image = reader.result as string;
+        const imageUrl = await uploadImage(base64Image, file.type);
+        if (imageUrl) {
+          handleChange('image', imageUrl);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleDelete = async () => {
@@ -73,13 +88,22 @@ const SidebarEditor: React.FC<SidebarEditorProps> = ({ article, setArticle }) =>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="image">Image URL</Label>
-        <Input
-          id="image"
-          value={article.image || ''}
-          onChange={(e) => handleChange('image', e.target.value)}
-          placeholder="Image URL"
-        />
+        <Label htmlFor="image-upload">Article Image</Label>
+        <div className="flex items-center space-x-2">
+          <Input
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+          <Button onClick={() => document.getElementById('image-upload')?.click()}>
+            Upload Image
+          </Button>
+          {article.image && (
+            <span className="text-sm text-gray-500">Image uploaded</span>
+          )}
+        </div>
       </div>
 
       <SourcesEditor article={article} setArticle={setArticle} />
