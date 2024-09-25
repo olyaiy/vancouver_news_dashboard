@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image'
 import { Article } from '@/types/types'
+import RichTextEditor from './text-editor'
 
 interface MainEditorProps {
   article: Article;
@@ -84,15 +85,19 @@ const MainEditor: React.FC<MainEditorProps> = ({ article, setArticle }) => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="rich-content">Content</Label>
+        {/* <Label htmlFor="rich-content">Content</Label>
         <Textarea
           id="rich-content"
           value={article.rich_content}
           onChange={(e) => handleChange('rich_content', e.target.value)}
           placeholder="Rich Content"
           rows={15}
-        />
+        /> */}
+
+        <RichTextEditor value={article.rich_content} onChange={(value) => handleChange('rich_content', value)} />
       </div>
+
+      
     </div>
   )
 }
